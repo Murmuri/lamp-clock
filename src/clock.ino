@@ -1,25 +1,25 @@
 #include <microDS3231.h>
 MicroDS3231 rtc;
 
-#define A 2;
-#define F 3;
-#define B 4;
-#define D 5;
-#define C 6;
-#define E 7;
-#define G 8;
+#define A 2
+#define F 3
+#define B 4
+#define D 5
+#define C 6
+#define E 7
+#define G 8
 
-#define D1 9;
-#define D2 10;
-#define D3 11;
-#define D4 12;
+#define D1 9
+#define D2 10
+#define D3 11
+#define D4 12
 
-#define BUTTON 13;
+#define BUTTON 13
 
-boolean lastButton = LOW;
+boolean lastButton = HIGH;
 
 const int MODES_COUNT = 3;
-const char* MODES[MODES_COUNT] = { "time", "date", "temp" };
+const char *MODES[MODES_COUNT] = {"time", "date", "temp"};
 int modeIndex = 0;
 
 void setup()
@@ -27,7 +27,7 @@ void setup()
   Serial.begin(9600);
   rtc.begin();
   
-  // rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR);
+  rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR);
 
   pinMode(A,OUTPUT);  
   pinMode(F,OUTPUT); 
@@ -47,16 +47,18 @@ void setup()
 
 void loop()
 {
-  currentButton = debounce(lastButton);
+  boolean currentButton = debounce(lastButton);
 
   if (lastButton == LOW && currentButton == HIGH)
   {
     changeMode();
+    lastButton = HIGH;
   }
 
-  switch (MODES[mode])
+  lastButton = currentButton;
+
+  if (MODES[modeIndex] == "time")
   {
-  case "time":
     int hours = rtc.getHours();
     int minutes = rtc.getMinutes();
     int hour1 = hours / 10;
@@ -65,10 +67,11 @@ void loop()
     int minutes2 = minutes % 10;
 
     showNumbers(hour1, hour2, minutes1, minutes2);
-    break;
-
-  case "date":
-    int day = rtc.getDay(); 
+  }
+  else if (MODES[modeIndex] == "date")
+  {
+    int day = rtc.getDate(); 
+    
     int day1 = day / 10;
     int day2 = day % 10;
     int month = rtc.getMonth(); 
@@ -81,9 +84,9 @@ void loop()
       month1, 
       month2
     );
-    break;
-  
-  case "temp":
+  }
+  else
+  {
     int temp = rtc.getTemperatureFloat(); 
     int temp1 = temp / 10;
     int temp2 = temp % 10;
@@ -94,10 +97,6 @@ void loop()
       temp1, 
       temp2
     );
-    break;
-  
-  default:
-    break;
   }
 }
 

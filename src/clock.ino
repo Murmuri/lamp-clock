@@ -26,24 +26,24 @@ void setup()
 {
   Serial.begin(9600);
   rtc.begin();
-  
-  rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR);
 
-  pinMode(A,OUTPUT);  
-  pinMode(F,OUTPUT); 
-  pinMode(B,OUTPUT); 
-  pinMode(D,OUTPUT); 
-  pinMode(C,OUTPUT);
-  pinMode(E,OUTPUT); 
-  pinMode(G,OUTPUT);  
+  // rtc.setTime(BUILD_SEC, BUILD_MIN, BUILD_HOUR, BUILD_DAY, BUILD_MONTH, BUILD_YEAR);
 
-  pinMode(D1,OUTPUT);  
-  pinMode(D2,OUTPUT);  
-  pinMode(D3,OUTPUT);  
-  pinMode(D4,OUTPUT);  
+  pinMode(A, OUTPUT);
+  pinMode(F, OUTPUT);
+  pinMode(B, OUTPUT);
+  pinMode(D, OUTPUT);
+  pinMode(C, OUTPUT);
+  pinMode(E, OUTPUT);
+  pinMode(G, OUTPUT);
 
-  pinMode(BUTTON,INPUT);
-}   
+  pinMode(D1, OUTPUT);
+  pinMode(D2, OUTPUT);
+  pinMode(D3, OUTPUT);
+  pinMode(D4, OUTPUT);
+
+  pinMode(BUTTON, INPUT);
+}
 
 void loop()
 {
@@ -70,33 +70,31 @@ void loop()
   }
   else if (MODES[modeIndex] == "date")
   {
-    int day = rtc.getDate(); 
-    
+    int day = rtc.getDate();
+
     int day1 = day / 10;
     int day2 = day % 10;
-    int month = rtc.getMonth(); 
+    int month = rtc.getMonth();
     int month1 = month / 10;
     int month2 = month % 10;
 
     showNumbers(
-      day1, 
-      day2,
-      month1, 
-      month2
-    );
+        day1,
+        day2,
+        month1,
+        month2);
   }
   else
   {
-    int temp = rtc.getTemperatureFloat(); 
+    int temp = rtc.getTemperatureFloat();
     int temp1 = temp / 10;
     int temp2 = temp % 10;
 
     showNumbers(
-      0, 
-      temp < 0 ? -1 : 0,
-      temp1, 
-      temp2
-    );
+        0,
+        temp < 0 ? -1 : 0,
+        temp1,
+        temp2);
   }
 }
 
@@ -115,84 +113,104 @@ boolean debounce(boolean last)
     delay(5);
     current = digitalRead(BUTTON);
     return current;
- }
+  }
 }
 
 void showNumbers(int firstLamp, int secondLamp, int thirdLamp, int quadrupleLamp)
 {
-  clearLEDs();
-  pickDigit(0); 
+  pickDigit(0);
+  delay(1);
   picSymbol(quadrupleLamp);
-  delay(5);
-
+  delay(4);
   clearLEDs();
-  pickDigit(1); 
+  delay(2);
+
+  pickDigit(1);
+  delay(1);
   picSymbol(thirdLamp);
-  delay(5);
-
+  delay(4);
   clearLEDs();
-  pickDigit(2); 
+  delay(2);
+
+  pickDigit(2);
+  delay(1);
   picSymbol(secondLamp);
-  delay(5);
-
+  delay(4);
   clearLEDs();
-  pickDigit(3); 
+  delay(2);
+
+  pickDigit(3);
+  delay(1);
   picSymbol(firstLamp);
-  delay(5);
-
+  delay(4);
   clearLEDs();
+  delay(2);
 }
 
-void pickDigit(int x) 
+void pickDigit(int x)
 {
-  digitalWrite(D1, LOW);
-  digitalWrite(D2, LOW);
-  digitalWrite(D3, LOW);
-  digitalWrite(D4, LOW);
-
-  switch (x) 
+  switch (x)
   {
-    case 0: digitalWrite(D1, HIGH);  
-      break;
-    case 1: digitalWrite(D2, HIGH);  
-      break;
-    case 2: digitalWrite(D3, HIGH);  
-      break;
-    default: digitalWrite(D4, HIGH); 
-      break;
+  case 0:
+    digitalWrite(D1, HIGH);
+    digitalWrite(D4, LOW);
+    break;
+  case 1:
+    digitalWrite(D1, LOW);
+    digitalWrite(D2, HIGH);
+    break;
+  case 2:
+    digitalWrite(D2, LOW);
+    digitalWrite(D3, HIGH);
+    break;
+  default:
+    digitalWrite(D3, LOW);
+    digitalWrite(D4, HIGH);
+    break;
   }
 }
 
-void picSymbol(int x) 
+void picSymbol(int x)
 {
-  switch (x) 
+  switch (x)
   {
-    default: zero();   
-      break;
-    case 1: one();     
-      break;
-    case 2: two();     
-      break;
-    case 3: three();  
-      break;
-    case 4: four();    
-      break;
-    case 5: five();    
-      break;
-    case 6: six();       
-      break;
-    case 7: seven(); 
-      break;
-    case 8: eight();  
-      break;
-    case 9: nine();  
-      break;
-    case -1: minus();  
-      break;
+  default:
+    zero();
+    break;
+  case 1:
+    one();
+    break;
+  case 2:
+    two();
+    break;
+  case 3:
+    three();
+    break;
+  case 4:
+    four();
+    break;
+  case 5:
+    five();
+    break;
+  case 6:
+    six();
+    break;
+  case 7:
+    seven();
+    break;
+  case 8:
+    eight();
+    break;
+  case 9:
+    nine();
+    break;
+  case -1:
+    minus();
+    break;
   }
 }
 
-void clearLEDs() 
+void clearLEDs()
 {
   digitalWrite(A, LOW);
   digitalWrite(B, LOW);
@@ -203,7 +221,7 @@ void clearLEDs()
   digitalWrite(G, LOW);
 }
 
-void zero() 
+void zero()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -214,7 +232,7 @@ void zero()
   digitalWrite(G, LOW);
 }
 
-void one() 
+void one()
 {
   digitalWrite(A, LOW);
   digitalWrite(B, HIGH);
@@ -225,7 +243,7 @@ void one()
   digitalWrite(G, LOW);
 }
 
-void two() 
+void two()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -236,7 +254,7 @@ void two()
   digitalWrite(G, HIGH);
 }
 
-void three() 
+void three()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -247,7 +265,7 @@ void three()
   digitalWrite(G, HIGH);
 }
 
-void four() 
+void four()
 {
   digitalWrite(A, LOW);
   digitalWrite(B, HIGH);
@@ -258,7 +276,7 @@ void four()
   digitalWrite(G, HIGH);
 }
 
-void five() 
+void five()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, LOW);
@@ -269,7 +287,7 @@ void five()
   digitalWrite(G, HIGH);
 }
 
-void six() 
+void six()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, LOW);
@@ -280,7 +298,7 @@ void six()
   digitalWrite(G, HIGH);
 }
 
-void seven() 
+void seven()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -291,7 +309,7 @@ void seven()
   digitalWrite(G, LOW);
 }
 
-void eight() 
+void eight()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -302,7 +320,7 @@ void eight()
   digitalWrite(G, HIGH);
 }
 
-void nine() 
+void nine()
 {
   digitalWrite(A, HIGH);
   digitalWrite(B, HIGH);
@@ -313,7 +331,7 @@ void nine()
   digitalWrite(G, HIGH);
 }
 
-void minus() 
+void minus()
 {
   digitalWrite(A, LOW);
   digitalWrite(B, LOW);

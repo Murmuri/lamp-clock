@@ -118,33 +118,36 @@ boolean debounce(boolean last)
 
 void showNumbers(int firstLamp, int secondLamp, int thirdLamp, int quadrupleLamp)
 {
+  int timeOut = 2; //8
+  int blinkTimeOut = 3; // 16
+
   pickDigit(0);
-  delay(1);
+  delay(timeOut);
   picSymbol(quadrupleLamp);
-  delay(4);
+  delay(blinkTimeOut);
   clearLEDs();
-  delay(2);
+  delay(timeOut);
 
   pickDigit(1);
-  delay(1);
+  delay(timeOut);
   picSymbol(thirdLamp);
-  delay(4);
+  delay(blinkTimeOut);
   clearLEDs();
-  delay(2);
+  delay(timeOut);
 
   pickDigit(2);
-  delay(1);
+  delay(timeOut);
   picSymbol(secondLamp);
-  delay(4);
+  delay(blinkTimeOut);
   clearLEDs();
-  delay(2);
+  delay(timeOut);
 
   pickDigit(3);
-  delay(1);
+  delay(timeOut);
   picSymbol(firstLamp);
-  delay(4);
+  delay(blinkTimeOut);
   clearLEDs();
-  delay(2);
+  delay(timeOut);
 }
 
 void pickDigit(int x)
